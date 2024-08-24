@@ -32,7 +32,7 @@ const HorizontalBar: React.FC = () => {
                 <TouchableOpacity onPress={() => navigation.navigate('Homescreen')}>
                     <Image source={images.icon1} style={styles.icon} />
                 </TouchableOpacity>
-                <Text style={styles.text}>Notifications</Text>
+                <Text style={styles.text}>Receipt</Text>
             </View>
             <View style={styles.buttonContainer}>
                 {['Ongoing', 'History', 'To rate'].map(button => (
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         fontSize: 19,
         fontWeight: 'bold',
         color: 'black',
-        marginRight: 125,
+        marginRight: 150,
       },
     icon: {
     width: 24,
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
         borderColor: '#FEBD2F',
         borderRadius :10,
     },
+    
 });
 
 export default HorizontalBar;

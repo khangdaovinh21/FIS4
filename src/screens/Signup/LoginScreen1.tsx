@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen1 = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  const handleLogin = () => {
-    console.log('Phone number:', phoneNumber);
-    navigation.navigate('LoginScreen2', { phoneNumber });
+  const handleLogin = async () => {
+    try {
+      await AsyncStorage.setItem('phoneNumber', phoneNumber);
+      console.log('Phone number saved:', phoneNumber); 
+      navigation.navigate('LoginScreen2', { phoneNumber });
+    } catch (error) {
+      console.error('Error saving phone number:', error);
+    }
   };
-
 
   const handleLogin1 = () => {
     navigation.navigate('LoginScreen');
   };
+
 
   return (
     <View style={styles.container}>
@@ -41,7 +47,6 @@ const LoginScreen1 = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../types';
+import { RootStackParamList, Order } from '../../../types';
 import images from '../../../assets/images';
 import { useOrders } from '../context/OrderContext';
+import { useRatedOrders } from '../context/RatedOrderContext';
+import { useCanceledOrders } from '../context/CanceledOrderContext';
 
 type DetailedOrderScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DetailedOrderScreen'>;
 type DetailedOrderScreenRouteProp = RouteProp<RootStackParamList, 'DetailedOrderScreen'>;
@@ -13,11 +15,26 @@ const DetailedOrderScreen: React.FC = () => {
     const route = useRoute<DetailedOrderScreenRouteProp>();
     const { order } = route.params;
     const navigation = useNavigation<DetailedOrderScreenNavigationProp>();
-    const { completeOrder } = useOrders();
+    const { completeOrder, completedOrders } = useOrders();
+    const { addRatedOrder, ratedOrders } = useRatedOrders();
+    const { canceledOrders } = useCanceledOrders();
+
+    const isOrderCompleted = completedOrders.some(completedOrder => completedOrder.id === order.id);
+    const isOrderRated = ratedOrders.some(ratedOrder => ratedOrder.id === order.id);
+    const isOrderCanceled = canceledOrders.some(canceledOrder => canceledOrder.id === order.id);
 
     const handleReceived = () => {
-        completeOrder(order);
-        navigation.navigate('OngoingScreen');
+        if (!isOrderCanceled) {
+            completeOrder(order);
+            navigation.navigate('OngoingScreen');
+        }
+    };
+
+    const handleRate = () => {
+        if (!isOrderCanceled) {
+            addRatedOrder(order);
+            navigation.navigate('RatingScreen', { order });
+        }
     };
 
     return (
@@ -30,8 +47,13 @@ const DetailedOrderScreen: React.FC = () => {
             <View style={styles.gruopstorefood}>
                 <Text style={styles.text1}>{order.storeName}</Text>
                 <View style={styles.carticon}>
-                    <Image source={images.Delivery} style={styles.icon} />
-                    <Text style={styles.texticon}>Delivering</Text>
+                    <Image 
+                        source={isOrderCanceled ? images.warning : (isOrderCompleted ? images.check : images.Delivery)} 
+                        style={styles.icon} 
+                    />
+                    <Text style={isOrderCanceled ? styles.texticonCanceled : (isOrderCompleted ? styles.textFinished : styles.texticon)}>
+                        {isOrderCanceled ? 'Canceled' : (isOrderCompleted ? 'Finished' : 'Delivering')}
+                    </Text>
                 </View>
                 <Text style={styles.texticon1}>01 Dec 10:45</Text>
             </View>
@@ -97,13 +119,32 @@ const DetailedOrderScreen: React.FC = () => {
                     </View>
                 </View>
             </View>
-            <TouchableOpacity style={styles.button1} onPress={handleReceived}>
-                <Text style={styles.buttonText}>Received</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListSupportScreen')}>
-                <Text style={styles.buttonText}>Need support</Text>
-            </TouchableOpacity>     
-                 
+            {isOrderCompleted || isOrderCanceled ? (
+                <View>
+                    <TouchableOpacity 
+                        style={styles.button1} 
+                    >
+                        <Text style={styles.buttonText}>Re-order</Text>
+                    </TouchableOpacity>
+                    {!isOrderRated && !isOrderCanceled ? (
+                        <TouchableOpacity 
+                            style={styles.button} 
+                            onPress={handleRate}
+                        >
+                            <Text style={styles.buttonText}>Rate</Text>
+                        </TouchableOpacity>
+                    ) : null}
+                </View>
+            ) : (
+                <View>
+                    <TouchableOpacity style={styles.button1} onPress={handleReceived}>
+                        <Text style={styles.buttonText}>Received</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListSupportScreen')}>
+                        <Text style={styles.buttonText}>Need support</Text>
+                    </TouchableOpacity>     
+                </View>
+            )}
         </View>
     );
 };
@@ -282,6 +323,19 @@ const styles = StyleSheet.create({
         width:20,
         height:20,
         marginRight:2,
+    },
+    textFinished: {
+        fontSize: 16,
+        marginLeft: 5,
+        color: "#059669", 
+        marginBottom: 5,
+        fontWeight: "bold", 
+    },
+    texticonCanceled:{
+        fontSize:16,
+        color:"red",
+        fontWeight:"bold",
+        marginLeft:5,
     },
 });
 

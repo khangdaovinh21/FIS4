@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useOrders } from '../context/OrderContext';
+import { useCanceledOrders } from '../context/CanceledOrderContext';
 import { useRatedOrders } from '../context/RatedOrderContext';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList, Order } from '../../../types';
@@ -8,13 +9,18 @@ import images from '../../../assets/images';
 
 const ToRateScreen: React.FC = () => {
     const { toRateOrders, removeOrderFromToRate } = useOrders();
+    const { canceledOrders } = useCanceledOrders();
     const { addRatedOrder } = useRatedOrders();
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+    const filteredOrders = toRateOrders.filter(
+        order => !canceledOrders.some(canceledOrder => canceledOrder.id === order.id)
+    );
+
     const handleRatePress = (order: Order) => {
-        addRatedOrder(order); // Thêm vào danh sách đã đánh giá
-        removeOrderFromToRate(order.id); // Xóa khỏi danh sách chờ đánh giá trong OrderContext
-        navigation.navigate('RatingScreen', { order }); // Điều hướng đến RatingScreen
+        addRatedOrder(order); 
+        removeOrderFromToRate(order.id); 
+        navigation.navigate('RatingScreen', { order }); 
     };
 
     const handleOrderPress = (order: Order) => {
@@ -24,7 +30,7 @@ const ToRateScreen: React.FC = () => {
     return (
         <View style={styles.container}>
             <FlatList
-                data={toRateOrders}
+                data={filteredOrders}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => handleOrderPress(item)}>

@@ -67,6 +67,15 @@ const Taskbar: React.FC = () => {
     });
     navigation.navigate('Notifcation');
   };
+  const handleTask5Press = () => {
+    setTaskIcons({
+      task1: images.task1,
+      task2: images.task2,
+      task3: images.task3,
+      task4: images.task4,
+    });
+    navigation.navigate('MyPage');
+  };
 
   return (
     <View style={styles.taskbar}>
@@ -82,7 +91,7 @@ const Taskbar: React.FC = () => {
       <TouchableOpacity style={styles.taskIcon} onPress={handleTask4Press}>
         <Image source={taskIcons.task4} style={styles.taskIconImage} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.taskIcon}>
+      <TouchableOpacity style={styles.taskIcon} onPress={handleTask5Press} >
         <Image source={images.task5} style={styles.taskIconImage} />
       </TouchableOpacity>
     </View>
@@ -98,7 +107,7 @@ const styles = StyleSheet.create({
   taskIcon: {},
   taskIconImage: {
     width: 75,
-    height: 75,
+    height: 70,
     resizeMode: 'contain',
   },
   taskIconImage1: {

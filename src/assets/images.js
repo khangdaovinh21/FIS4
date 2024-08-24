@@ -22,9 +22,26 @@ const images = {
     paypal: require('./home/icon4.png'),
     search: require('./home/search.png'),
     check: require('./home/check.png'),
-
+    warning: require('./home/warning.png'),
+    gear: require('./home/gear.png'),
+    heart: require('./home/heart.png'),
+    heartred: require('./home/heartred.png'),
+    penprofile: require('./home/penprofile.png'),
+    phone: require('./home/phone.png'),
+    address: require('./home/address.png'),
+    order: require('./home/order.png'),
+    box: require('./home/box.png'),
+    truck: require('./home/truck.png'),
+    rating: require('./home/rating.png'),
+    momo: require('./home/momo.webp'),
+    chatbot: require('./home/chatbot.png'),
+    gearbot: require('./home/gearbot.png'),
+    ai: require('./home/ai.png'),
+    ai1: require('./home/ai1.png'),
+    chatbot1: require('./home/chatbot1.png'),
+    send2: require('./home/send2.png'),
     
-  };
+ };
   
   export default images;
   

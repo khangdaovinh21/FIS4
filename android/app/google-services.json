@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "448808995057",
+    "project_id": "fis4-c8d75",
+    "storage_bucket": "fis4-c8d75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448808995057:android:be1fb8af628582460cc150",
+        "android_client_info": {
+          "package_name": "com.fis4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS_kaQdMphw7XDPHJ3Pn4OsYNK5XKsaew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

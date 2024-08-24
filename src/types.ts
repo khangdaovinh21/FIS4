@@ -1,4 +1,3 @@
-
 export interface Topping {
   name: string;
   price: number;
@@ -27,6 +26,14 @@ export interface Coupon {
   discount: number;
 }
 
+export interface Notification {
+  id: string;
+  title: string;
+  image: string; 
+  description: string;
+  time: string;
+}
+
 export type RootStackParamList = {
   Onboarding: undefined;
   Onboarding1: undefined;
@@ -40,22 +47,25 @@ export type RootStackParamList = {
   storefood1: undefined;
   storefood2: undefined;
   storefood3: { coupon: Coupon };
-  coupons: undefined; 
+  coupons: undefined;
   coupons2: { coupon: Coupon };
   WebViewScreen: undefined;
   LoadingScreen: undefined;
-  RatingScreen: undefined; 
-  RatingScreen1: undefined; 
+  RatingScreen: undefined;
+  RatingScreen1: undefined;
   GroupText: undefined;
   NewFood: undefined;
   WishList: undefined;
   Taskbar: undefined;
-  Notifcation: undefined;
   ReceiptScreen: undefined;
   OngoingScreen: undefined;
   HistoryScreen: undefined;
   ToRateScreen: undefined;
   ListSupportScreen: undefined;
   QuestionDetailScreen: { question: string };
-  DetailedOrderScreen: { order: Order };  
+  DetailedOrderScreen: { order: Order };
+  Notifcation: { voucher: Notification };
+  NotificationSettingsScreen: undefined; 
+  MyPage: undefined; 
+  ChatbotScreen: undefined; // Add this line if it's missing
 };

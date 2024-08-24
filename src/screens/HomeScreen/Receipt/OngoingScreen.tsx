@@ -4,15 +4,23 @@ import { useOrders } from '../context/OrderContext';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList, Order } from '../../../types';
 import images from '../../../assets/images';
+import { useCanceledOrders } from '../context/CanceledOrderContext';
 
 const OngoingScreen: React.FC = () => {
-    const { orders } = useOrders();
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { orders, completeOrder } = useOrders();
+  const { addCanceledOrder } = useCanceledOrders();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-    const handleOrderPress = (order: Order) => {
-        navigation.navigate('DetailedOrderScreen', { order });
-    };
 
+  const handleOrderPress = (order: Order) => {
+    navigation.navigate('DetailedOrderScreen', { order });
+  };
+
+  const handleCancelOrder = (order: Order) => {
+    completeOrder(order);
+    addCanceledOrder(order);
+    navigation.navigate('OngoingScreen');
+  };
     return (
         <View style={styles.container}>
             <FlatList
@@ -24,7 +32,7 @@ const OngoingScreen: React.FC = () => {
                             <View style={styles.carticon}>
                                 <Image source={images.Delivery} style={styles.icon} />
                                 <Text style={styles.texticon}>Delivering</Text>
-                                <Text style={styles.texticon1}> 01 Dec 10:45</Text>
+                                <Text style={styles.texticon1}>01 Dec 10:45</Text>
                             </View>
                             <View style={styles.cartItem}>
                                 <View style={styles.storeNameGruop}>
@@ -34,7 +42,15 @@ const OngoingScreen: React.FC = () => {
                                 <View style={styles.itemTotalContainer}>
                                     <Text style={styles.orderText1}>{item.total}$</Text>
                                     <Text style={styles.texttotal1}>(paypal)</Text>
-                                    <Text style={styles.texttotal}> 2 dishes </Text>
+                                    <Text style={styles.texttotal}>2 dishes</Text>
+                                </View>
+                                <View style={styles.buttonContainer}>
+                                    <TouchableOpacity 
+                                        style={styles.cancelButton}
+                                        onPress={() => handleCancelOrder(item)}
+                                    >
+                                        <Text style={styles.buttonText}>Canceled</Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
@@ -120,6 +136,24 @@ const styles = StyleSheet.create({
     flatListContent: {
         paddingBottom: 15,
     },
+    cancelButton: {
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent:"center",
+        borderWidth:0.5,
+        height:40,
+        width:100,
+    },
+    buttonText: {
+        color: 'gray',
+        fontWeight: 'bold',  
+    },
+    buttonContainer:{
+        backgroundColor:"white",
+        alignItems:"flex-end",
+        
+    }
+
 });
 
 
